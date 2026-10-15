@@ -101,6 +101,45 @@
 
 正式验收需同时满足：真实调用数为正、离线调用数和错误输出为零，输出与解释一致，公开文件不含密钥。
 
+第一章节验收：
+## 本地模型替代实验记录
+
+**背景**：TypeSafe 云端 API 在当前网络环境下无法注册（403），
+因此使用 NeoHorse-Jev-4B（本地 4.2B 蒸馏模型，Q4_K_M 量化，
+RTX 4060 8GB 显存）替代云端 Jev 完成 Notebook 实验。
+
+**替代的影响**：
+- 三原语接口、原子问题纪律、概率校准的学习方法完全一致
+- 具体概率数值与云端有偏差，简单场景方向一致，复杂场景可能分歧
+- 本地模型校准程度未知，不可用于生产环境的高风险决策
+
+### 逐条实验记录
+
+| 日期 | 模型 | 章节 | state（摘要） | 问题版本 | 输出 | 解释 | 是否需修改 |
+|---|---|---|---|---|---|---|---|
+| 2026-10-15 | NeoHorse-Jev-4B | 简介·连通性 | "你好" | greeting v1 | noul=0.9917 | 准确识别打招呼 | 否 |
+| 2026-10-15 | NeoHorse-Jev-4B | 快速开始·三原语 | Stripe 连接失败 | urgency v1 | noul=0.9943 | 与云端方向一致 | 否 |
+| 2026-10-15 | NeoHorse-Jev-4B | 快速开始·三原语 | Stripe 连接失败 | intent v1 | troubleshoot=0.9971 | 与云端一致 | 否 |
+| 2026-10-15 | NeoHorse-Jev-4B | 快速开始·三原语 | Stripe 连接失败 | frustration v1 | score=1.9131 | 比云端略低 0.08 | 观察 |
+| 2026-10-15 | NeoHorse-Jev-4B | 应用构建·赛事指挥台 | runner_injury | incident_type v1 | medical_help | 与预期一致 | 否 |
+| 2026-10-15 | NeoHorse-Jev-4B | 应用构建·赛事指挥台 | runner_injury | requires_human v1 | 0.99 | 与预期一致 | 否 |
+| 2026-10-15 | NeoHorse-Jev-4B | 应用构建·赛事指挥台 | water_station | incident_type v1 | supplies | 与预期一致 | 否 |
+| 2026-10-15 | NeoHorse-Jev-4B | 应用构建·赛事指挥台 | water_station | requires_human v1 | 0.48 | 边界情况，合理 | 否 |
+| 2026-10-15 | NeoHorse-Jev-4B | 应用构建·赛事指挥台 | shirt_pickup | incident_type v1 | event_info | 与预期一致 | 否 |
+| 2026-10-15 | NeoHorse-Jev-4B | 应用构建·赛事指挥台 | shirt_pickup | priority v1 | 0.94 | 与预期一致 | 否 |
+
+### 与云端 Jev 的对比
+
+| 指标 | 云端 Jev (教程) | 本地 NeoHorse-Jev-4B | 差异 |
+|---|---|---|---|
+| urgency | 0.98 | 0.9943 | +0.014 |
+| intent | 1.0 | 0.9971 | -0.003 |
+| frustration | 1.99 | 1.9131 | -0.077 |
+
+**结论**：本地 4B 模型在简单场景下与云端 Jev 判断方向一致，
+数值偏差在可接受范围内；复杂场景（模糊措辞、边界判断）的
+校准程度需要进一步验证。
+
 ## 贡献说明
 
 简介、快速开始、AI 入门、System One、状态、应用构建及应用场景七章由**荞麦**编写，来源于 `jev-cookbook-qiaomai`。
