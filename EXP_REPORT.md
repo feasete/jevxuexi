@@ -1,3 +1,9 @@
+## 资料来源与参考
+
+- **主要参考**：[datawhalechina/jev-cookbook](https://github.com/datawhalechina/jev-cookbook)（Jev 中文实战指南与镜像站）
+- **官方文档**：[TypeSafe Docs](https://docs.typesafe.ai/)
+- **模型说明**：本实验因网络限制，使用本地 `NeoHorse-Jev-4B` (GGUF Q4_K_M) 替代云端 API，接口通过自建的 `local_jev.py` 兼容层实现。
+
 # Jev 本地化实验报告
 
 **实验者**：yuxing  
